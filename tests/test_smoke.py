@@ -7,10 +7,13 @@ loss math, and the report renderer. Heavier integration is exercised by the pipe
 from __future__ import annotations
 
 import math
+from types import SimpleNamespace
 
 import pytest
 
 from mcapi.config import apply_overrides, load_config
+from mcapi.data import Batch
+from mcapi.evaluate import model_inputs_for
 from mcapi.report import build_table
 
 
@@ -56,6 +59,22 @@ def test_distillation_loss_is_finite_and_positive():
     loss = distillation_loss(student, teacher, labels, temperature=2.0, alpha=0.5)
     assert torch.isfinite(loss)
     assert loss.item() > 0
+
+
+def test_evaluation_filters_token_type_ids_for_distilbert():
+    torch = pytest.importorskip("torch")
+    batch = Batch(
+        input_ids=torch.ones((2, 4), dtype=torch.long),
+        attention_mask=torch.ones((2, 4), dtype=torch.long),
+        token_type_ids=torch.zeros((2, 4), dtype=torch.long),
+        labels=torch.zeros(2, dtype=torch.long),
+    )
+
+    distilbert = SimpleNamespace(config=SimpleNamespace(model_type="distilbert"))
+    bert = SimpleNamespace(config=SimpleNamespace(model_type="bert"))
+
+    assert "token_type_ids" not in model_inputs_for(distilbert, batch)
+    assert "token_type_ids" in model_inputs_for(bert, batch)
 
 
 def test_report_table_renders_expected_rows():
