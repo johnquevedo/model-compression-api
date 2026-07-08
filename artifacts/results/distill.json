@@ -1,0 +1,23 @@
+{
+  "output_dir": "artifacts/student-distilled",
+  "best_accuracy": 0.8818807339449541,
+  "train_seconds": 535.168949842453,
+  "temperature": 4.0,
+  "alpha": 0.5,
+  "history": [
+    {
+      "epoch": 0,
+      "train_loss": 1.0003220353126525,
+      "accuracy": 0.8795871559633027,
+      "f1_macro": 0.8795413731178339,
+      "n_examples": 872
+    },
+    {
+      "epoch": 1,
+      "train_loss": 0.3057928818762302,
+      "accuracy": 0.8818807339449541,
+      "f1_macro": 0.8817499470076084,
+      "n_examples": 872
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "teacher": {
+    "eval": {
+      "accuracy": 0.9243119266055045,
+      "f1_macro": 0.9242545485175202,
+      "n_examples": 872
+    },
+    "benchmark": {
+      "device": "cpu",
+      "per_batch_size": [
+        {
+          "batch_size": 1,
+          "latency_ms_mean": 28.290783340000157,
+          "latency_ms_p50": 28.26893749999826,
+          "latency_ms_p95": 28.63269344999928,
+          "throughput_examples_per_s": 35.347200817380916
+        },
+        {
+          "batch_size": 8,
+          "latency_ms_mean": 157.47780329999975,
+          "latency_ms_p50": 157.41593799999976,
+          "latency_ms_p95": 159.0910580000015,
+          "throughput_examples_per_s": 50.80081022440839
+        },
+        {
+          "batch_size": 32,
+          "latency_ms_mean": 600.8640582999998,
+          "latency_ms_p50": 600.2516245000002,
+          "latency_ms_p95": 606.162039699996,
+          "throughput_examples_per_s": 53.25663859898077
+        }
+      ],
+      "peak_memory_mb": 1388.8125,
+      "param_count": 109483778,
+      "size_mb": 417.65528106689453
+    }
+  },
+  "student-finetuned": {
+    "eval": {
+      "accuracy": 0.8864678899082569,
+      "f1_macro": 0.8863744950701472,
+      "n_examples": 872
+    },
+    "benchmark": {
+      "device": "cpu",
+      "per_batch_size": [
+        {
+          "batch_size": 1,
+          "latency_ms_mean": 14.425958340000307,
+          "latency_ms_p50": 14.40037500000102,
+          "latency_ms_p95": 14.661870649999287,
+          "throughput_examples_per_s": 69.31948480865908
+        },
+        {
+          "batch_size": 8,
+          "latency_ms_mean": 79.11214489999905,
+          "latency_ms_p50": 79.0632084999956,
+          "latency_ms_p95": 79.97898910000245,
+          "throughput_examples_per_s": 101.12227408462155
+        },
+        {
+          "batch_size": 32,
+          "latency_ms_mean": 301.5500033800018,
+          "latency_ms_p50": 301.73783349999894,
+          "latency_ms_p95": 303.81545220000135,
+          "throughput_examples_per_s": 106.11838713752168
+        }
+      ],
+      "peak_memory_mb": 1676.90625,
+      "param_count": 66955010,
+      "size_mb": 256.3262891769409
+    }
+  },
+  "student-distilled": {
+    "eval": {
+      "accuracy": 0.8818807339449541,
+      "f1_macro": 0.8817499470076084,
+      "n_examples": 872
+    },
+    "benchmark": {
+      "device": "cpu",
+      "per_batch_size": [
+        {
+          "batch_size": 1,
+          "latency_ms_mean": 14.538444199999105,
+          "latency_ms_p50": 14.497145499994701,
+          "latency_ms_p95": 14.755429350000071,
+          "throughput_examples_per_s": 68.78315081334917
+        },
+        {
+          "batch_size": 8,
+          "latency_ms_mean": 79.10263749999984,
+          "latency_ms_p50": 79.03875050000408,
+          "latency_ms_p95": 80.04550990000325,
+          "throughput_examples_per_s": 101.1344280397732
+        },
+        {
+          "batch_size": 32,
+          "latency_ms_mean": 308.9291299799999,
+          "latency_ms_p50": 307.21912550000496,
+          "latency_ms_p95": 319.15827675000867,
+          "throughput_examples_per_s": 103.5836277468288
+        }
+      ],
+      "peak_memory_mb": 1677.96875,
+      "param_count": 66955010,
+      "size_mb": 256.3262891769409
+    }
+  },
+  "student-quantized": {
+    "eval": {
+      "accuracy": 0.8807339449541285,
+      "f1_macro": 0.8806711720246743,
+      "n_examples": 872
+    },
+    "benchmark": {
+      "device": "cpu",
+      "per_batch_size": [
+        {
+          "batch_size": 1,
+          "latency_ms_mean": 32.40878746000078,
+          "latency_ms_p50": 32.310333500007005,
+          "latency_ms_p95": 32.95155379999244,
+          "throughput_examples_per_s": 30.855828877714387
+        },
+        {
+          "batch_size": 8,
+          "latency_ms_mean": 251.47098337999975,
+          "latency_ms_p50": 247.60858299998745,
+          "latency_ms_p95": 282.8408038000006,
+          "throughput_examples_per_s": 31.812815508464205
+        },
+        {
+          "batch_size": 32,
+          "latency_ms_mean": 1029.751999940002,
+          "latency_ms_p50": 1031.7766455000026,
+          "latency_ms_p95": 1050.1112331499953,
+          "throughput_examples_per_s": 31.07544340954372
+        }
+      ],
+      "peak_memory_mb": 1460.40625,
+      "param_count": 66955010,
+      "size_mb": 133.19278049468994
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "output_dir": "artifacts/student-finetuned",
+  "best_accuracy": 0.8864678899082569,
+  "train_seconds": 303.8600151538849,
+  "history": [
+    {
+      "epoch": 0,
+      "train_loss": 0.36072903060913086,
+      "accuracy": 0.8853211009174312,
+      "f1_macro": 0.8853211009174312,
+      "n_examples": 872
+    },
+    {
+      "epoch": 1,
+      "train_loss": 0.14266218320652843,
+      "accuracy": 0.8864678899082569,
+      "f1_macro": 0.8863744950701472,
+      "n_examples": 872
+    }
+  ]
+}

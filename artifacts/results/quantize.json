@@ -1,0 +1,10 @@
+{
+  "source_dir": "artifacts/student-distilled",
+  "output_dir": "artifacts/student-quantized",
+  "dtype": "qint8",
+  "engine": "qnnpack",
+  "quantized_state_dict": "pytorch_model_quantized.pt",
+  "size_mb": 133.19278049468994,
+  "source_size_mb": 256.3262891769409,
+  "param_count": 66955010
+}
