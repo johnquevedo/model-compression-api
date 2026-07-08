@@ -22,6 +22,9 @@ hf_cache/
 # Trained artifacts (large) — keep the dir, ignore contents.
 artifacts/*
 !artifacts/.gitkeep
+!artifacts/results/
+!artifacts/results/*.json
+!artifacts/results/*.md
 
 # OS
 .DS_Store
