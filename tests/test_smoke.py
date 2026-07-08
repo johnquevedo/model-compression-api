@@ -82,6 +82,7 @@ def test_report_table_renders_expected_rows():
         "teacher": {
             "eval": {"accuracy": 0.924, "f1_macro": 0.923},
             "benchmark": {
+                "device": "cpu",
                 "param_count": 109_000_000,
                 "size_mb": 417.0,
                 "peak_memory_mb": 1500.0,
@@ -94,6 +95,7 @@ def test_report_table_renders_expected_rows():
         "student-quantized": {
             "eval": {"accuracy": 0.905, "f1_macro": 0.904},
             "benchmark": {
+                "device": "cpu",
                 "param_count": 66_000_000,
                 "size_mb": 65.0,
                 "peak_memory_mb": 400.0,
@@ -108,3 +110,4 @@ def test_report_table_renders_expected_rows():
     assert "teacher" in table
     assert "student-quantized" in table
     assert "Accuracy" in table
+    assert "Device" in table

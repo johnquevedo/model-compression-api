@@ -179,9 +179,14 @@ def cmd_benchmark(args) -> None:
 
         qmodel = load_quantized_model(cfg.paths.quantized_dir, cfg.quantize.dtype)
         cpu = torch.device("cpu")
+        qbench = benchmark_torch_model(qmodel, cfg, cpu, cfg.paths.quantized_dir, needs_tt(qmodel))
+        qmeta_path = os.path.join(cfg.paths.quantized_dir, "quantization.json")
+        if os.path.exists(qmeta_path):
+            qmeta = load_json(qmeta_path)
+            qbench["param_count"] = qmeta.get("param_count", qbench.get("param_count"))
         records["student-quantized"] = {
             "eval": evaluate_model(qmodel, eval_loader, cpu),
-            "benchmark": benchmark_torch_model(qmodel, cfg, cpu, cfg.paths.quantized_dir, needs_tt(qmodel)),
+            "benchmark": qbench,
         }
 
     ensure_dir(cfg.paths.results_dir)

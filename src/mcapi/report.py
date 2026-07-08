@@ -12,6 +12,7 @@ from tabulate import tabulate
 
 COLUMNS = [
     "Model",
+    "Device",
     "Accuracy",
     "F1 (macro)",
     "Params (M)",
@@ -40,6 +41,7 @@ def _row_for(name: str, rec: Dict[str, object]) -> List[object]:
 
     return [
         name,
+        bench.get("device", "-"),
         fmt(eval_m.get("accuracy")),
         fmt(eval_m.get("f1_macro")),
         fmt(params / 1e6, 1) if isinstance(params, (int, float)) else "-",
@@ -73,7 +75,8 @@ def render_markdown_report(records: Dict[str, Dict[str, object]]) -> str:
         table,
         "",
         "_Latency/throughput measured with synthetic batches at seq_len from config; "
-        "accuracy on the eval split. Absolute numbers depend on your hardware._",
+        "accuracy on the eval split. Device is shown because quantized PyTorch "
+        "models run on CPU. Absolute numbers depend on your hardware._",
         "",
     ]
     return "\n".join(lines)

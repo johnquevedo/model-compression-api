@@ -49,6 +49,21 @@ def _peak_memory_mb(device: torch.device) -> Optional[float]:
         return None
 
 
+def _synchronize(device: torch.device) -> None:
+    if device.type == "cuda":
+        torch.cuda.synchronize()
+    elif device.type == "mps" and hasattr(torch, "mps"):
+        torch.mps.synchronize()
+
+
+def _estimated_model_size_mb(model: torch.nn.Module) -> float:
+    """Approximate in-memory parameter/buffer size when no local artifact exists."""
+    total = 0
+    for tensor in list(model.parameters()) + list(model.buffers()):
+        total += tensor.numel() * tensor.element_size()
+    return total / (1024 * 1024)
+
+
 @torch.no_grad()
 def benchmark_forward(
     forward_fn: Callable[[Dict[str, torch.Tensor]], torch.Tensor],
@@ -67,16 +82,15 @@ def benchmark_forward(
         # Warmup (also triggers lazy CUDA/MPS kernel compilation).
         for _ in range(cfg.benchmark.warmup_iters):
             forward_fn(batch)
+        _synchronize(device)
         if device.type == "cuda":
-            torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats(device)
 
         latencies_ms: List[float] = []
         for _ in range(cfg.benchmark.measure_iters):
             t0 = time.perf_counter()
             forward_fn(batch)
-            if device.type == "cuda":
-                torch.cuda.synchronize()
+            _synchronize(device)
             latencies_ms.append((time.perf_counter() - t0) * 1000.0)
 
         mean_ms = float(np.mean(latencies_ms))
@@ -119,5 +133,8 @@ def benchmark_torch_model(
     out = benchmark_forward(torch_forward_fn(model), cfg, device, needs_token_type, vocab_size)
     out["param_count"] = count_parameters(model)
     if model_dir:
-        out["size_mb"] = dir_size_mb(model_dir)
+        disk_size = dir_size_mb(model_dir)
+        out["size_mb"] = disk_size if disk_size > 0 else _estimated_model_size_mb(model)
+    else:
+        out["size_mb"] = _estimated_model_size_mb(model)
     return out
