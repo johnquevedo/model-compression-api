@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+.mypy_cache/
+tests/
+notebooks/
+# Keep artifacts/ — the served model lives there.
+artifacts/results/*.json

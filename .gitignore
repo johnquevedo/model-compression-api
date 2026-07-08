@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# Caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# HF / model caches
+.cache/
+hf_cache/
+
+# Trained artifacts (large) — keep the dir, ignore contents.
+artifacts/*
+!artifacts/.gitkeep
+
+# OS
+.DS_Store

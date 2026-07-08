@@ -1,0 +1,57 @@
+# Model Compression & Inference API — default configuration.
+# Everything here is overridable on the CLI, e.g. `mcapi distill --epochs 2`.
+
+task:
+  # GLUE SST-2 binary sentiment classification. Small, standard, laptop-friendly.
+  # Test-set labels are private, so we evaluate on the validation split (872 examples).
+  dataset: "glue"
+  subset: "sst2"
+  text_field: "sentence"
+  label_field: "label"
+  num_labels: 2
+  train_split: "train"
+  eval_split: "validation"
+
+models:
+  # Teacher is already fine-tuned on SST-2 (~92% acc), so no teacher training needed.
+  teacher: "textattack/bert-base-uncased-SST-2"
+  # Student starts from a general pretrained checkpoint and is fine-tuned / distilled.
+  student: "distilbert-base-uncased"
+
+data:
+  max_length: 128
+  # Cap examples for laptop runs. Set to null / 0 to use the full split.
+  max_train_samples: 20000
+  max_eval_samples: 872
+
+train:
+  epochs: 3
+  batch_size: 32
+  eval_batch_size: 64
+  learning_rate: 5.0e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.06
+  seed: 42
+
+distill:
+  # KD loss = alpha * KL(student||teacher soft targets) * T^2 + (1 - alpha) * CE(hard labels)
+  temperature: 4.0
+  alpha: 0.5
+
+quantize:
+  # Dynamic int8 quantization of Linear layers (CPU inference).
+  dtype: "qint8"
+
+benchmark:
+  batch_sizes: [1, 8, 32]
+  warmup_iters: 5
+  measure_iters: 50
+  seq_length: 128
+
+paths:
+  artifacts_dir: "artifacts"
+  student_dir: "artifacts/student-finetuned"
+  distilled_dir: "artifacts/student-distilled"
+  quantized_dir: "artifacts/student-quantized"
+  onnx_dir: "artifacts/student-onnx"
+  results_dir: "artifacts/results"

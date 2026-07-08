@@ -1,0 +1,14 @@
+# Serve the compressed model. Mounts artifacts/ so you can rebuild the model
+# without rebuilding the image. Set MCAPI_BACKEND=torch to serve the fp32 model.
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      MCAPI_MODEL_DIR: /app/artifacts/student-quantized
+      MCAPI_BACKEND: quantized
+      MCAPI_MAX_LENGTH: "128"
+    volumes:
+      - ./artifacts:/app/artifacts:ro
+    restart: unless-stopped
