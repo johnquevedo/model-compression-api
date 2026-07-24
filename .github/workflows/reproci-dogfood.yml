@@ -28,7 +28,7 @@ jobs:
         continue-on-error: true
         uses: johnquevedo/reproci@v0.2.0
         with:
-          command: python validation/reproci_dogfood/controlled_failure.py
+          command: python3 validation/reproci_dogfood/controlled_failure.py
           artifact-name: reproci-dogfood-${{ github.run_id }}-${{ matrix.attempt }}
           retention-days: "7"
       - name: Require the controlled failure
