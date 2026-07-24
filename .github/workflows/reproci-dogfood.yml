@@ -1,0 +1,50 @@
+name: ReproCI owner-controlled dogfood
+
+on:
+  push:
+    branches:
+      - reproci-dogfood-v0.2.0
+
+permissions:
+  contents: read
+
+jobs:
+  capture-and-replay:
+    name: capture and replay (${{ matrix.attempt }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        attempt: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6
+        with:
+          python-version: "3.12"
+      - name: Capture controlled failure with ReproCI v0.2.0
+        id: capture
+        continue-on-error: true
+        uses: johnquevedo/reproci@v0.2.0
+        with:
+          command: python validation/reproci_dogfood/controlled_failure.py
+          artifact-name: reproci-dogfood-${{ github.run_id }}-${{ matrix.attempt }}
+          retention-days: "7"
+      - name: Require the controlled failure
+        if: steps.capture.outcome != 'failure'
+        run: exit 1
+      - name: Upload and replay through the distributed platform
+        env:
+          MATRIX_ATTEMPT: ${{ matrix.attempt }}
+          REPROCI_DOGFOOD_API_TOKEN: ${{ secrets.REPROCI_DOGFOOD_API_TOKEN }}
+          REPROCI_DOGFOOD_TENANT: "96015551"
+          REPROCI_DOGFOOD_URL: https://arising-heath-ahead-flickr.trycloudflare.com
+        run: python .github/scripts/reproci_dogfood.py
+      - name: Retain raw dogfood result
+        if: always() && hashFiles('reproci-dogfood-result.json') != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: reproci-dogfood-result-${{ github.run_id }}-${{ matrix.attempt }}
+          path: reproci-dogfood-result.json
+          retention-days: "30"
